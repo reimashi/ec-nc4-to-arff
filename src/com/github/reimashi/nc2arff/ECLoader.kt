@@ -1,4 +1,8 @@
-package com.github.reimashi.ec-nc4-to-arff;
+package com.github.reimashi.nc2arff;
+
+import org.kohsuke.args4j.CmdLineException
+import org.kohsuke.args4j.CmdLineParser
+import org.kohsuke.args4j.Option
 
 import ucar.ma2.ArrayDouble
 import ucar.ma2.ArrayFloat
@@ -9,15 +13,41 @@ import java.io.*
 import java.text.DecimalFormat
 import java.util.*
 import java.util.logging.Logger
+import java.util.HashSet
 
 class ECLoaderMain {
     val log = Logger.getLogger("Main")
 
-    fun main(args: Array<String>) {
-        // Se definen los ficheros de entrada/salida
-        val wrfPath: String = "wrf.nc4"
-        val wrfOut: String = "wrf.arff"
+    @Option(name = "-h", usage = "Muestra la ayuda")
+    private var showHelp: Boolean = false
 
+    @Option(name = "-i", usage = "Fichero de entrada, en formato NetCDF")
+    private var inputFilename: String? = "wrf.nc4"
+
+    @Option(name = "-o", usage = "Fichero de salida, en formato ARFF")
+    private var outputFilename: String? = "wrf.arff"
+
+    fun main(args: Array<String>) {
+        val parser = CmdLineParser(this)
+
+        try {
+            parser.parseArgument(HashSet(args.asList()))
+
+            if (this.showHelp) {
+                parser.printUsage(System.out);
+            }
+            else {
+                processDataset(inputFilename!!, outputFilename!!)
+            }
+        } catch(e: CmdLineException) {
+            log.severe("No se han podido parsear los parametros. " + e.message)
+        }
+    }
+
+    /**
+     * Procesa un fichero de entrada en formato NetCDF y lo escribe en un fichero de salida en formato ARFF
+     */
+    private fun processDataset(wrfPath: String, wrfOut: String) {
         var file: NetcdfFile? = null
         var outFile: File
         var writer: Writer

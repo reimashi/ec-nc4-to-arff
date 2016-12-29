@@ -5,17 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.reimashi</groupId>
-    <artifactId>ec-nc4-to-arff</artifactId>
+    <artifactId>nc2arff</artifactId>
     <version>1.0</version>
 
     <properties>
-        <kotlin.version>1.0.5</kotlin.version>
+        <kotlin.version>1.0.6</kotlin.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>edu.ucar</groupId>
             <artifactId>netcdf4</artifactId>
+            <version>LATEST</version>
+        </dependency>
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
             <version>LATEST</version>
         </dependency>
         <dependency>
